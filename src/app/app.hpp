@@ -12,9 +12,9 @@
 
 class App {
  private:
-  std::vector<double> x1_values;
-  std::vector<double> x2_values;
-  std::vector<int> labels;
+  std::vector<double> x1_values_;
+  std::vector<double> x2_values_;
+  std::vector<int> labels_;
 
  public:
   App(void);
