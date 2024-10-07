@@ -1,5 +1,5 @@
-#ifndef DATASET_H
-#define DATASET_H
+#ifndef DATASET_HPP
+#define DATASET_HPP
 #include <vector>
 
 class DataSet {
@@ -12,6 +12,7 @@ class DataSet {
   const std::vector<double>& GetX1Values() const;
   const std::vector<double>& GetX2Values() const;
   const std::vector<int>& GetLabels() const;
+  double GetEntropy() const;
 
  private:
   std::vector<double> x1_values_;
