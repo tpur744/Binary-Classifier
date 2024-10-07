@@ -23,7 +23,18 @@ App::~App() {
 }
 
 void App::AddData(std::string x_in_, std::string y_in_, std::string label_in_) {
-  // TODO
+  double x1 = stod(x_in_);
+  double x2 = stod(y_in_);
+  int label = stoi(label_in_);
+
+  if (label != -1 && label != 1) {
+    cout << "Label must be either -1 or 1." << endl;
+    return;
+  }
+
+  x1_values.push_back(x1);
+  x2_values.push_back(x2);
+  labels.push_back(label);
 }
 
 void App::ClearData() {

@@ -1,7 +1,7 @@
 #ifndef APP_H
 #define APP_H
-
 #include <string>
+#include <vector>
 
 /*
 *****************************
@@ -12,6 +12,10 @@
 
 class App {
  private:
+  std::vector<double> x1_values;
+  std::vector<double> x2_values;
+  std::vector<int> labels;
+
  public:
   App(void);
   ~App(void);
