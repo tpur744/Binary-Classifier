@@ -38,7 +38,9 @@ void App::AddData(std::string x_in_, std::string y_in_, std::string label_in_) {
 }
 
 void App::ClearData() {
-  // TODO
+  x1_values.clear();
+  x2_values.clear();
+  labels.clear();
 }
 
 void App::ShowData() {
