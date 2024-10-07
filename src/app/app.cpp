@@ -61,7 +61,21 @@ void App::ShowData() {
 }
 
 void App::TrainClassifier() {
-  // TODO
+  int positive_count = 0;
+  int negative_count = 0;
+  for (int label : labels_) {
+    if (label == 1) {
+      positive_count++;
+    } else {
+      negative_count++;
+    }
+  }
+  if (positive_count == 0 || negative_count == 0) {
+    cout << "Cannot perform that operation without at least one observation "
+            "from each category in training data set."
+         << endl;
+    return;
+  }
 }
 
 void App::Classify(std::string x_in_, std::string y_in_) {
