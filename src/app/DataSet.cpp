@@ -37,14 +37,36 @@ const std::vector<double>& DataSet::GetX2Values() const { return x2_values_; }
 const std::vector<int>& DataSet::GetLabels() const { return labels_; }
 
 double DataSet::GetEntropy() const {
-  int num_observations = GetNumObservations();
-  int positive_count = GetPositiveCount();
-  int negative_count = GetNegativeCount();
-  if (positive_count == 0 || negative_count == 0) {
+  int n = GetNumObservations();
+  int n1 = GetPositiveCount();
+  int n2 = GetNegativeCount();
+  if (n1 == 0 || n2 == 0) {
     return 0.0;
   }
-  double p1 = (double)positive_count / num_observations;
-  double p2 = (double)negative_count / num_observations;
+  double p1 = (double)n1 / n;
+  double p2 = (double)n2 / n;
 
   return -(p1 * log2(p1) - p2 * log2(p2));
+}
+
+int DataSet::GetNumFeatures() const { return 2; }
+
+double DataSet::GetFeatureValue(int feature_index,
+                                int observation_index) const {
+  if (feature_index == 0) {
+    return x1_values_[observation_index];
+  } else {
+    return x2_values_[observation_index];
+  }
+}
+
+void DataSet::Split(int feature_index, double split_value, DataSet& left,
+                    DataSet& right) const {
+  for (int i = 0; i < GetNumObservations(); i++) {
+    if (GetFeatureValue(feature_index, i) < split_value) {
+      left.AddObservation(x1_values_[i], x2_values_[i], labels_[i]);
+    } else {
+      right.AddObservation(x1_values_[i], x2_values_[i], labels_[i]);
+    }
+  }
 }

@@ -13,6 +13,10 @@ class DataSet {
   const std::vector<double>& GetX2Values() const;
   const std::vector<int>& GetLabels() const;
   double GetEntropy() const;
+  int GetNumFeatures() const;
+  double GetFeatureValue(int feature_index, int observation_index) const;
+  void Split(int feature_index, double split_value, DataSet& left,
+             DataSet& right) const;
 
  private:
   std::vector<double> x1_values_;
