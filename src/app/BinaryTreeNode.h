@@ -12,6 +12,7 @@ class BinaryTreeNode {
   int GetLabel() const;
   void SetLeft(BinaryTreeNode* left);
   void SetRight(BinaryTreeNode* right);
+
   ~BinaryTreeNode();
 
  private:

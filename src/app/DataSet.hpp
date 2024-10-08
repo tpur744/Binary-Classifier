@@ -18,6 +18,9 @@ class DataSet {
   void Split(int feature_index, double split_value, DataSet& left,
              DataSet& right) const;
 
+  void ShowData(void);
+  void ClearData(void);
+
  private:
   std::vector<double> x1_values_;
   std::vector<double> x2_values_;

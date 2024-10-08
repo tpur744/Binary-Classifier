@@ -2,6 +2,9 @@
 
 #include <iostream>
 
+#include "BinaryTree.h"
+#include "BinaryTreeNode.h"
+#include "DataSet.hpp"
 #include "message.hpp"
 #include "utils.hpp"
 
@@ -15,6 +18,8 @@ using namespace std;
 */
 
 App::App() {
+  classifier_ = nullptr;
+
   // TODO
 }
 
@@ -32,46 +37,44 @@ void App::AddData(std::string x_in_, std::string y_in_, std::string label_in_) {
     return;
   }
 
-  x1_values_.push_back(x1);
-  x2_values_.push_back(x2);
-  labels_.push_back(label);
+  data_set_.AddObservation(x1, x2, label);
 }
 
 void App::ClearData() {
-  x1_values_.clear();
-  x2_values_.clear();
-  labels_.clear();
-}
-
-void App::ShowData() {
-  if (x1_values_.size() == 0) {
-    std::cout << "No observations in training data set." << std::endl;
-    return;
-  }
-
-  for (size_t i = 0; i < x1_values_.size(); ++i) {
-    // Format each feature to three decimal places
-    double x1_formatted = std::round(x1_values_[i] * 1000) / 1000;
-    double x2_formatted = std::round(x2_values_[i] * 1000) / 1000;
-
-    // Output the observation
-    std::cout << i << "\t" << x1_formatted << "\t" << x2_formatted << "\t"
-              << labels_[i] << std::endl;
+  data_set_.ClearData();
+  if (classifier_) {
+    delete classifier_;
+    classifier_ = nullptr;
   }
 }
+
+void App::ShowData() { data_set_.ShowData(); }
 
 void App::TrainClassifier() {
-  int positive_count = data_set_.GetPositiveCount();
-  int negative_count = data_set_.GetNegativeCount();
+  int positive_count = 0;
+  int negative_count = 0;
+  positive_count = data_set_.GetPositiveCount();
+  negative_count = data_set_.GetNegativeCount();
 
+  // Ensure there is at least one observation from both categories
   if (positive_count == 0 || negative_count == 0) {
-    cout << "Cannot perform that operation without at least one observation "
-            "from each category in training data set."
-         << endl;
+    std::cout << "Cannot train classifier without at least one observation "
+                 "from each category."
+              << std::endl;
     return;
   }
-  // delete classifier_;
-  // classifier_ = new BinaryClassifier();
+
+  // Delete the old classifier if it exists
+  if (classifier_) {
+    delete classifier_;
+    classifier_ = nullptr;
+  }
+
+  // Create a new classifier and grow the tree
+  classifier_ = new BinaryTree();
+  classifier_->Grow(data_set_);
+
+  std::cout << "Classifier trained successfully!" << std::endl;
 }
 
 void App::Classify(std::string x_in_, std::string y_in_) {
@@ -79,5 +82,11 @@ void App::Classify(std::string x_in_, std::string y_in_) {
 }
 
 void App::ShowClassifier() {
-  // TODO
+  if (!classifier_) {
+    std::cout << "Cannot perform that operation without first training a "
+                 "classifier."
+              << std::endl;
+    return;
+  }
+  classifier_->Show();
 }

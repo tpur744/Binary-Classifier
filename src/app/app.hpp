@@ -3,6 +3,8 @@
 #include <string>
 #include <vector>
 
+#include "BinaryTree.h"
+#include "BinaryTreeNode.h"
 #include "DataSet.hpp"
 
 /*
@@ -18,6 +20,7 @@ class App {
   std::vector<double> x2_values_;
   std::vector<int> labels_;
   DataSet data_set_;
+  BinaryTree* classifier_;
 
  public:
   App(void);
