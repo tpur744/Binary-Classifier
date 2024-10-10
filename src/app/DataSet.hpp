@@ -20,6 +20,7 @@ class DataSet {
 
   void ShowData(void);
   void ClearData(void);
+  bool IsPure() const;
 
  private:
   std::vector<double> x1_values_;

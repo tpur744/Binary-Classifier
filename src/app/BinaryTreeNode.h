@@ -12,14 +12,16 @@ class BinaryTreeNode {
   int GetLabel() const;
   void SetLeft(BinaryTreeNode* left);
   void SetRight(BinaryTreeNode* right);
+  void SetLabel(int label);
+  void SetSplitValue(double split_value);
 
   ~BinaryTreeNode();
 
  private:
   double split_value_;
   int label_;
-  BinaryTreeNode* left_;
-  BinaryTreeNode* right_;
+  BinaryTreeNode* left_child_;
+  BinaryTreeNode* right_child_;
 };
 
 #endif

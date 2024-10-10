@@ -19,7 +19,6 @@ using namespace std;
 
 App::App() {
   classifier_ = nullptr;
-
   // TODO
 }
 

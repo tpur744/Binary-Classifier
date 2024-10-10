@@ -96,3 +96,10 @@ void DataSet::ClearData(void) {
   x2_values_.clear();
   labels_.clear();
 }
+
+bool DataSet::IsPure() const {
+  if (GetPositiveCount() == 0 || GetNegativeCount() == 0) {
+    return true;
+  }
+  return false;
+}
