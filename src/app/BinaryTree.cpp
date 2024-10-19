@@ -27,6 +27,7 @@ void BinaryTree::FindBestSplit(const DataSet& data_set,
       double split_value = data_set.GetFeatureValue(i, j);
       DataSet left, right;
       data_set.Split(i, split_value, left, right);
+
       double entropy_left = left.GetEntropy();
       double entropy_right = right.GetEntropy();
 
@@ -43,7 +44,6 @@ void BinaryTree::FindBestSplit(const DataSet& data_set,
         best_impurity_drop = impurity_drop;
         best_feature_index = i;
         best_split_value = split_value;
-        cout << "best split value is" << best_split_value << endl;
       }
     }
   }
@@ -51,12 +51,6 @@ void BinaryTree::FindBestSplit(const DataSet& data_set,
 
 void BinaryTree::Grow(const DataSet& data_set) {
   // Base case: If the dataset is pure (no more splits possible), stop recursion
-
-  std::cout << "Grow called with " << data_set.GetNumObservations()
-            << " observations." << std::endl;
-
-  cout << "Positive count: " << data_set.GetPositiveCount() << endl;
-  cout << "Negative count: " << data_set.GetNegativeCount() << endl;
 
   if (data_set.IsPure()) {
     std::cout << "Dataset is pure. Stopping recursion." << std::endl;
@@ -66,11 +60,7 @@ void BinaryTree::Grow(const DataSet& data_set) {
   double best_feature_index = -1;
   double best_split_value = 0;
 
-  std::cout << "About to declare left and right DataSets." << std::endl;
   DataSet left, right;
-  std::cout << "Declared left and right DataSets." << std::endl;
-
-  std::cout << "About to call FindBestSplit." << std::endl;
   FindBestSplit(data_set, best_feature_index, best_split_value);
 
   std::cout << "Best split found at feature " << best_feature_index

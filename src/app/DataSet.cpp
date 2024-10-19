@@ -55,7 +55,6 @@ double DataSet::GetEntropy() const {
   double impurity = -p1 * log2(p1) - p2 * log2(p2);
 
   // double impurity = -(p1 * log2(p1) - p2 * log2(p2));
-  std::cout << "Entropy: " << impurity << std::endl;
   return impurity;
 }
 
@@ -73,16 +72,17 @@ double DataSet::GetFeatureValue(int feature_index,
 void DataSet::Split(int feature_index, double split_value, DataSet& left,
                     DataSet& right) const {
   for (int i = 0; i < GetNumObservations(); i++) {
-    if (GetFeatureValue(feature_index, i) < split_value) {
-      left.AddObservation(x1_values_[i], x2_values_[i], labels_[i]);
-    } else {
+    double feature_value = GetFeatureValue(feature_index, i);
+
+    if (feature_value >= split_value) {
       right.AddObservation(x1_values_[i], x2_values_[i], labels_[i]);
+    } else if (feature_value < split_value) {
+      left.AddObservation(x1_values_[i], x2_values_[i], labels_[i]);
     }
   }
 
-  // Handle cases where either dataset is empty
   if (left.IsEmpty() || right.IsEmpty()) {
-    std::cout << "Warning: Split resulted in empty dataset." << std::endl;
+    std::cout << "empty dataset" << std::endl;
   }
 }
 
