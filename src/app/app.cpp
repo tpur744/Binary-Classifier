@@ -23,7 +23,10 @@ App::App() {
 }
 
 App::~App() {
-  // TODO
+  if (classifier_) {
+    delete classifier_;
+    classifier_ = nullptr;
+  }
 }
 
 void App::AddData(std::string x_in_, std::string y_in_, std::string label_in_) {

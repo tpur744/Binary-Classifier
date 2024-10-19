@@ -1,7 +1,10 @@
 #include "DataSet.hpp"
 
 #include <iostream>
-DataSet::DataSet() {}
+DataSet::DataSet()
+    : x1_values_(),
+      x2_values_(),
+      labels_() {}  // Initialize the vectors in the constructor
 
 void DataSet::AddObservation(double x1, double x2, int label) {
   x1_values_.push_back(x1);
@@ -49,7 +52,11 @@ double DataSet::GetEntropy() const {
   double p1 = (double)n1 / n;
   double p2 = (double)n2 / n;
 
-  return -(p1 * log2(p1) - p2 * log2(p2));
+  double impurity = -p1 * log2(p1) - p2 * log2(p2);
+
+  // double impurity = -(p1 * log2(p1) - p2 * log2(p2));
+  std::cout << "Entropy: " << impurity << std::endl;
+  return impurity;
 }
 
 int DataSet::GetNumFeatures() const { return 2; }
@@ -71,6 +78,11 @@ void DataSet::Split(int feature_index, double split_value, DataSet& left,
     } else {
       right.AddObservation(x1_values_[i], x2_values_[i], labels_[i]);
     }
+  }
+
+  // Handle cases where either dataset is empty
+  if (left.IsEmpty() || right.IsEmpty()) {
+    std::cout << "Warning: Split resulted in empty dataset." << std::endl;
   }
 }
 
@@ -98,8 +110,9 @@ void DataSet::ClearData(void) {
 }
 
 bool DataSet::IsPure() const {
-  if (GetPositiveCount() == 0 || GetNegativeCount() == 0) {
-    return true;
-  }
-  return false;
+  return GetPositiveCount() == 0 || GetNegativeCount() == 0;
+}
+
+bool DataSet::IsEmpty() const {
+  return x1_values_.empty();  // Check just one vector as all are same size
 }

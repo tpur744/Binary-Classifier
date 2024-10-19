@@ -31,6 +31,7 @@ class App {
   void TrainClassifier(void);
   void Classify(std::string, std::string);
   void ShowClassifier(void);
+  void CreateDataSetTest(void);
 };
 
 #endif  // APP_H

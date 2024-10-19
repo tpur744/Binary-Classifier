@@ -88,10 +88,13 @@
     "__tuple": "cpp",
     "stack": "cpp",
     "__nullptr": "cpp",
-    "__string": "cpp"
+    "__string": "cpp",
+    "print": "cpp",
+    "queue": "cpp"
   },
   "editor.tabSize": 2,
   "editor.insertSpaces": true,
   "editor.formatOnSave": true,
   "C_Cpp.clang_format_fallbackStyle": "Google",
+  "C_Cpp.default.configurationProvider": "ms-vscode.cmake-tools",
 }
