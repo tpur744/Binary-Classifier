@@ -109,9 +109,7 @@ void DataSet::ClearData(void) {
   labels_.clear();
 }
 
-bool DataSet::IsPure() const {
-  return GetPositiveCount() == 0 || GetNegativeCount() == 0;
-}
+bool DataSet::IsPure() const { return GetEntropy() == 0.0; }
 
 bool DataSet::IsEmpty() const {
   return x1_values_.empty();  // Check just one vector as all are same size

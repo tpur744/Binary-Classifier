@@ -29,14 +29,21 @@ void BinaryTree::FindBestSplit(const DataSet& data_set,
       data_set.Split(i, split_value, left, right);
       double entropy_left = left.GetEntropy();
       double entropy_right = right.GetEntropy();
+
+      int n1 = left.GetNumObservations();
+
       double impurity_drop =
-          data_set.GetEntropy() - (left.GetNumObservations() * entropy_left +
-                                   right.GetNumObservations() * entropy_right) /
-                                      data_set.GetNumObservations();
+          data_set.GetEntropy() -
+          (left.GetNumObservations() / data_set.GetNumObservations()) *
+              entropy_left -
+          (right.GetNumObservations() / data_set.GetNumObservations()) *
+              entropy_right;
+
       if (impurity_drop > best_impurity_drop) {
         best_impurity_drop = impurity_drop;
         best_feature_index = i;
         best_split_value = split_value;
+        cout << "best split value is" << best_split_value << endl;
       }
     }
   }
