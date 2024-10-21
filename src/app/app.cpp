@@ -18,27 +18,6 @@ using namespace std;
 */
 
 App::App() {
-  AddData(to_string(0.9074), to_string(0.5488), to_string(-1));
-  AddData(to_string(0.9529), to_string(0.6392), to_string(-1));
-  AddData(to_string(0.5635), to_string(0.7734), to_string(-1));
-  AddData(to_string(0.9567), to_string(0.9788), to_string(-1));
-  AddData(to_string(0.8162), to_string(0.9824), to_string(-1));
-  AddData(to_string(0.3279), to_string(0.3789), to_string(-1));
-  AddData(to_string(0.0179), to_string(0.3716), to_string(-1));
-  AddData(to_string(0.4246), to_string(0.1961), to_string(-1));
-  AddData(to_string(0.4670), to_string(0.3277), to_string(-1));
-  AddData(to_string(0.3394), to_string(0.0856), to_string(-1));
-  AddData(to_string(0.0788), to_string(0.5709), to_string(1));
-  AddData(to_string(0.4853), to_string(0.7109), to_string(1));
-  AddData(to_string(0.4786), to_string(0.9579), to_string(1));
-  AddData(to_string(0.2427), to_string(0.8961), to_string(1));
-  AddData(to_string(0.4001), to_string(0.9797), to_string(1));
-  AddData(to_string(0.8530), to_string(0.4117), to_string(1));
-  AddData(to_string(0.5159), to_string(0.3474), to_string(1));
-  AddData(to_string(0.6385), to_string(0.1585), to_string(1));
-  AddData(to_string(0.5231), to_string(0.4751), to_string(1));
-  AddData(to_string(0.5486), to_string(0.0172), to_string(1));
-
   classifier_ = nullptr;
   // TODO
 }
@@ -81,8 +60,9 @@ void App::TrainClassifier() {
 
   // Ensure there is at least one observation from both categories
   if (positive_count == 0 || negative_count == 0) {
-    std::cout << "Cannot train classifier without at least one observation "
-                 "from each category."
+    std::cout << "Cannot perform that operation without at least one "
+                 "observation from "
+                 "each category in training data set."
               << std::endl;
     return;
   }

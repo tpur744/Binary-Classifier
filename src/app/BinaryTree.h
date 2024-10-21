@@ -18,7 +18,7 @@ class BinaryTree {
   void ShowNode(BinaryTreeNode* node, int depth) const;
   void GrowSubtree(BinaryTreeNode* node, const DataSet& data_set);
   void ShowClassifier() const;
-  int Classify(int x1, int x2) const;
+  int Classify(double x1, double x2) const;
 
  private:
   BinaryTreeNode* root_;

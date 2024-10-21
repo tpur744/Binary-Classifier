@@ -131,18 +131,20 @@ void BinaryTree::ShowNode(BinaryTreeNode* node, int depth) const {
 
   // If the node is a leaf, print the label only
   if (node->IsLeaf()) {
-    std::cout << std::string(depth * 2, ' ')  // Indent based on depth
-              << "label: " << node->GetLabel()
-              << std::endl;  // Print only the label
-    leaf_count++;            // Increment the leaf count
+    std::cout << std::string(depth * 3,
+                             ' ')  // Indent based on depth (3 spaces)
+              << "label: " << node->GetLabel()  // Print the label
+              << std::endl;                     // End of line
+    leaf_count++;                               // Increment the leaf count
   } else {
     // Print current node: split dimension, split value, and impurity
-    std::cout << std::string(depth * 2, ' ')      // Indent based on depth
+    std::cout << std::string(depth * 3,
+                             ' ')  // Indent based on depth (3 spaces)
               << node->GetFeatureIndex() << ", "  // Print split dim
               << std::fixed << std::setprecision(3) << node->GetSplitValue()
               << ", "  // Print split value
               << std::fixed << std::setprecision(3) << node->GetImpurity()
-              << std::endl;  // Print impurity
+              << std::endl;  // End of line
   }
 
   // Recursively show the left and right children
@@ -151,23 +153,86 @@ void BinaryTree::ShowNode(BinaryTreeNode* node, int depth) const {
     ShowNode(node->GetRight(), depth + 1);  // Show right child
   }
 
-  // after tree has been traversed, print the number of leaf nodes
-  if (depth == 0) {
+  // After the entire tree has been traversed, print the number of leaf nodes
+  if (depth == 0) {  // Ensure this happens only at the root level
     std::cout << "Binary classification tree is comprised of " << leaf_count
               << " leaf node(s)." << std::endl;
-    leaf_count = 0;  // Reset leaf count for next tree
+    leaf_count = 0;  // Reset leaf count for the next tree printout
   }
 }
 
+// Show the classifier
+// void BinaryTree::ShowClassifier() const {
+//   if (root_ == nullptr) {
+//     std::cout << "The classifier has not been trained." << std::endl;
+//     return;
+//   }
+//   ShowNode(root_, 0);  // Call the helper function to print the tree
+//   structure
+// }
+
+// // Recursive function to show nodes of the tree
+// void BinaryTree::ShowNode(BinaryTreeNode* node, int depth) const {
+//   static int leaf_count = 0;  // Keep track of the number of leaf nodes
+//   if (node == nullptr) {
+//     return;  // Base case: if the node is null, just return
+//   }
+
+//   // If the node is a leaf, print the label only
+//   if (node->IsLeaf()) {
+//     std::cout << std::string(depth * 2, ' ')  // Indent based on depth
+//               << "label: " << node->GetLabel()
+//               << std::endl;  // Print only the label
+//     leaf_count++;            // Increment the leaf count
+//   } else {
+//     // Print current node: split dimension, split value, and impurity
+//     std::cout << std::string(depth * 2, ' ')      // Indent based on depth
+//               << node->GetFeatureIndex() << ", "  // Print split dim
+//               << std::fixed << std::setprecision(3) << node->GetSplitValue()
+//               << ", "  // Print split value
+//               << std::fixed << std::setprecision(3) << node->GetImpurity()
+//               << std::endl;  // Print impurity
+//   }
+
+//   // Recursively show the left and right children
+//   if (!node->IsLeaf()) {
+//     ShowNode(node->GetLeft(), depth + 1);   // Show left child
+//     ShowNode(node->GetRight(), depth + 1);  // Show right child
+//   }
+
+//   // after tree has been traversed, print the number of leaf nodes
+//   if (depth == 0) {
+//     std::cout << "Binary classification tree is comprised of " << leaf_count
+//               << " leaf node(s)." << std::endl;
+//     leaf_count = 0;  // Reset leaf count for next tree
+//   }
+// }
+
 // Classify an observation
-int BinaryTree::Classify(int x1, int x2) const {
+int BinaryTree::Classify(double x1, double x2) const {
   BinaryTreeNode* current = root_;
   while (!current->IsLeaf()) {
-    if (x1 >= current->GetSplitValue()) {
-      current = current->GetRight();
-    } else {
-      current = current->GetLeft();
+    int feature_index = current->GetFeatureIndex();  // Check which feature the
+                                                     // node is splitting on
+    double split_value = current->GetSplitValue();
+
+    // If the split is on feature 0 (x1)
+    if (feature_index == 0) {
+      if (x1 >= split_value) {
+        current = current->GetRight();
+      } else {
+        current = current->GetLeft();
+      }
+    }
+    // If the split is on feature 1 (x2)
+    else if (feature_index == 1) {
+      if (x2 >= split_value) {
+        current = current->GetRight();
+      } else {
+        current = current->GetLeft();
+      }
     }
   }
+
   return current->GetLabel();
 }
