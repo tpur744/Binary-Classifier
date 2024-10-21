@@ -66,7 +66,6 @@ void BinaryTree::Grow(const DataSet& data_set) {
 
   // Find the best feature and value for splitting
   FindBestSplit(data_set, best_feature_index, best_split_value);
-  cout << "best_split_value: " << best_split_value << endl;
 
   if (best_feature_index == -1) {
     std::cout << "No best split found. Stopping recursion." << std::endl;
@@ -125,14 +124,17 @@ void BinaryTree::ShowClassifier() const {
 
 // Recursive function to show nodes of the tree
 void BinaryTree::ShowNode(BinaryTreeNode* node, int depth) const {
+  static int leaf_count = 0;  // Keep track of the number of leaf nodes
   if (node == nullptr) {
     return;  // Base case: if the node is null, just return
   }
 
   // If the node is a leaf, print the label only
   if (node->IsLeaf()) {
-    std::cout << std::string(depth * 2, ' ')     // Indent based on depth
-              << node->GetLabel() << std::endl;  // Print only the label
+    std::cout << std::string(depth * 2, ' ')  // Indent based on depth
+              << "label: " << node->GetLabel()
+              << std::endl;  // Print only the label
+    leaf_count++;            // Increment the leaf count
   } else {
     // Print current node: split dimension, split value, and impurity
     std::cout << std::string(depth * 2, ' ')      // Indent based on depth
@@ -147,6 +149,13 @@ void BinaryTree::ShowNode(BinaryTreeNode* node, int depth) const {
   if (!node->IsLeaf()) {
     ShowNode(node->GetLeft(), depth + 1);   // Show left child
     ShowNode(node->GetRight(), depth + 1);  // Show right child
+  }
+
+  // after tree has been traversed, print the number of leaf nodes
+  if (depth == 0) {
+    std::cout << "Binary classification tree is comprised of " << leaf_count
+              << " leaf node(s)." << std::endl;
+    leaf_count = 0;  // Reset leaf count for next tree
   }
 }
 
