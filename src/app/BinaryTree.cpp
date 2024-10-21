@@ -23,8 +23,8 @@ void BinaryTree::DeleteTree(BinaryTreeNode* node) { root_ = nullptr; }
 // Find the best split for the given dataset
 
 void BinaryTree::FindBestSplit(const DataSet& data_set,
-                               double& best_feature_index,
-                               double& best_split_value) const {
+                               double* best_feature_index,
+                               double* best_split_value) const {
   double best_impurity_drop = -1.0;
   for (int i = 0; i < data_set.GetNumFeatures(); i++) {
     for (int j = 0; j < data_set.GetNumObservations(); j++) {
@@ -42,8 +42,8 @@ void BinaryTree::FindBestSplit(const DataSet& data_set,
           data_set.GetEntropy() - (n)*entropy_left - (1 - n) * entropy_right;
       if (impurity_drop > best_impurity_drop) {
         best_impurity_drop = impurity_drop;
-        best_feature_index = i;
-        best_split_value = split_value;
+        *best_feature_index = i;
+        *best_split_value = split_value;
       }
     }
   }
@@ -65,7 +65,7 @@ void BinaryTree::Grow(const DataSet& data_set) {
   double best_split_value = 0.0;
 
   // Find the best feature and value for splitting
-  FindBestSplit(data_set, best_feature_index, best_split_value);
+  FindBestSplit(data_set, &best_feature_index, &best_split_value);
 
   if (best_feature_index == -1) {
     std::cout << "No best split found. Stopping recursion." << std::endl;
