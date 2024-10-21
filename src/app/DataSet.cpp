@@ -1,5 +1,5 @@
 #include "DataSet.hpp"
-
+using namespace std;
 #include <iostream>
 DataSet::DataSet()
     : x1_values_(),

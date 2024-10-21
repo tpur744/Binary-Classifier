@@ -160,7 +160,6 @@ void BinaryTree::FindBestSplit(const DataSet& data_set,
       double split_value = data_set.GetFeatureValue(i, j);
       DataSet left, right;
       data_set.Split(i, split_value, left, right, data_set);
-
       double entropy_left = left.GetEntropy();
       double entropy_right = right.GetEntropy();
 
@@ -170,7 +169,7 @@ void BinaryTree::FindBestSplit(const DataSet& data_set,
           data_set.GetEntropy() -
           (left.GetNumObservations() / data_set.GetNumObservations()) *
               entropy_left -
-          (1 - ((right.GetNumObservations() / data_set.GetNumObservations()))) *
+          (1 - ((left.GetNumObservations() / data_set.GetNumObservations()))) *
               entropy_right;
 
       if (impurity_drop > best_impurity_drop) {
@@ -191,8 +190,6 @@ void BinaryTree::Grow(const DataSet& data_set) {
         label);               // Create a leaf node with the majority label
     root_->SetLeft(nullptr);  // Ensure no children are set for leaf nodes
     root_->SetRight(nullptr);
-    std::cout << "Dataset is pure. Created leaf node with label: " << label
-              << std::endl;
     return;
   }
 
@@ -212,6 +209,9 @@ void BinaryTree::Grow(const DataSet& data_set) {
 
   // Split the dataset based on the best split
   DataSet left, right;
+
+  cout << "dataset has " << data_set.GetNumObservations() << " observations."
+       << endl;
 
   data_set.Split(best_feature_index, best_split_value, left, right, data_set);
 
