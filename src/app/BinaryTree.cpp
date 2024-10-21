@@ -159,7 +159,7 @@ void BinaryTree::FindBestSplit(const DataSet& data_set,
     for (int j = 0; j < data_set.GetNumObservations(); j++) {
       double split_value = data_set.GetFeatureValue(i, j);
       DataSet left, right;
-      data_set.Split(i, split_value, left, right);
+      data_set.Split(i, split_value, left, right, data_set);
 
       double entropy_left = left.GetEntropy();
       double entropy_right = right.GetEntropy();
@@ -184,9 +184,8 @@ void BinaryTree::FindBestSplit(const DataSet& data_set,
 
 void BinaryTree::Grow(const DataSet& data_set) {
   // Base case: If the dataset is pure (no more splits possible), stop recursion
-  cout << "Growing tree..." << endl;
+
   if (data_set.IsPure()) {
-    cout << "data_set label is: " << data_set.GetMajorityLabel() << endl;
     int label = data_set.GetMajorityLabel();
     root_ = new BinaryTreeNode(
         label);               // Create a leaf node with the majority label
@@ -202,6 +201,10 @@ void BinaryTree::Grow(const DataSet& data_set) {
 
   // Find the best feature and value for splitting
   FindBestSplit(data_set, best_feature_index, best_split_value);
+
+  std::cout << "Best split found at feature " << best_feature_index
+            << " and value " << best_split_value << std::endl;
+
   if (best_feature_index == -1) {
     std::cout << "No best split found. Stopping recursion." << std::endl;
     return;
@@ -210,24 +213,12 @@ void BinaryTree::Grow(const DataSet& data_set) {
   // Split the dataset based on the best split
   DataSet left, right;
 
-  data_set.Split(best_feature_index, best_split_value, left, right);
-  cout << "the best split value is: " << best_split_value << endl;
-  // Loop through both datasets and print out the data inside them
-  std::cout << "Left dataset:" << std::endl;
-  for (int i = 0; i < left.GetNumObservations(); ++i) {
-    for (int j = 0; j < left.GetNumFeatures(); ++j) {
-      std::cout << left.GetFeatureValue(j, i) << " ";
-    }
-    std::cout << "| Label: " << left.GetLabel(i) << std::endl;
-  }
+  data_set.Split(best_feature_index, best_split_value, left, right, data_set);
 
-  std::cout << "Right dataset:" << std::endl;
-  for (int i = 0; i < right.GetNumObservations(); ++i) {
-    for (int j = 0; j < right.GetNumFeatures(); ++j) {
-      std::cout << right.GetFeatureValue(j, i) << " ";
-    }
-    std::cout << "| Label: " << right.GetLabel(i) << std::endl;
-  }
+  std::cout << "Left dataset has " << left.GetNumObservations()
+            << " observations." << std::endl;
+  std::cout << "Right dataset has " << right.GetNumObservations()
+            << " observations." << std::endl;
 
   // If either side of the split is empty, stop recursion to avoid infinite
   // loops
@@ -237,19 +228,9 @@ void BinaryTree::Grow(const DataSet& data_set) {
     return;
   }
 
-  std::cout << "Best split found at feature " << best_feature_index
-            << " and value " << best_split_value << std::endl;
-
-  std::cout << "Left dataset has " << left.GetNumObservations()
-            << " observations." << std::endl;
-  std::cout << "Right dataset has " << right.GetNumObservations()
-            << " observations." << std::endl;
-
   // Create an internal node with the split value and impurity
-  double impurity =
-      data_set.GetEntropy();  // You can replace this with any impurity measure
-  root_ = new BinaryTreeNode(best_split_value, best_feature_index,
-                             impurity);  // Create an internal node
+  double impurity = data_set.GetEntropy();
+  root_ = new BinaryTreeNode(best_split_value, best_feature_index, impurity);
 
   // Recursively grow the left and right subtrees
   if (!left.IsEmpty()) {
@@ -290,17 +271,18 @@ void BinaryTree::ShowNode(BinaryTreeNode* node, int depth) const {
     return;  // Base case: if the node is null, just return
   }
 
-  // If the node is a leaf, print the label
+  // If the node is a leaf, print the label only
   if (node->IsLeaf()) {
-    std::cout << std::string(depth * 2, ' ')  // Indent based on depth
-              << "label: " << node->GetLabel() << std::endl;
+    std::cout << std::string(depth * 2, ' ')     // Indent based on depth
+              << node->GetLabel() << std::endl;  // Print only the label
   } else {
     // Print current node: split dimension, split value, and impurity
-    std::cout << std::string(depth * 2, ' ')  // Indent based on depth
-              << "split dim: " << node->GetFeatureIndex()
-              << ", split value: " << std::fixed << std::setprecision(3)
-              << node->GetSplitValue() << ", impurity: " << std::fixed
-              << std::setprecision(3) << node->GetImpurity() << std::endl;
+    std::cout << std::string(depth * 2, ' ')      // Indent based on depth
+              << node->GetFeatureIndex() << ", "  // Print split dim
+              << std::fixed << std::setprecision(3) << node->GetSplitValue()
+              << ", "  // Print split value
+              << std::fixed << std::setprecision(3) << node->GetImpurity()
+              << std::endl;  // Print impurity
   }
 
   // Recursively show the left and right children

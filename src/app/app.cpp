@@ -90,17 +90,14 @@ void App::TrainClassifier() {
 
   // Delete the old classifier if it exists
   if (classifier_) {
-    cout << "Deleting old classifier..." << endl;
     delete classifier_;
     classifier_ = nullptr;
   }
   if (data_set_.IsEmpty()) {
-    cout << "No data to train on." << endl;
     return;
   }
   if (classifier_ == nullptr) {
     // classifier_ = new BinaryTree();
-    cout << "Creating new classifier..." << endl;
     // return;
   }
   // Create a new classifier and grow the tree

@@ -16,7 +16,7 @@ class DataSet {
   int GetNumFeatures() const;
   double GetFeatureValue(int feature_index, int observation_index) const;
   void Split(int feature_index, double split_value, DataSet& left,
-             DataSet& right) const;
+             DataSet& right, const DataSet& data_set) const;
 
   void ShowData(void);
   void ClearData(void);
@@ -25,10 +25,11 @@ class DataSet {
   int GetMajorityLabel() const;
   int GetLabel(int index) const;
 
- private:
   std::vector<double> x1_values_;
   std::vector<double> x2_values_;
   std::vector<int> labels_;
+
+ private:
 };
 
 #endif

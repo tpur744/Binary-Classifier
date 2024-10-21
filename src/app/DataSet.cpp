@@ -74,9 +74,9 @@ double DataSet::GetFeatureValue(int feature_index,
 }
 
 void DataSet::Split(int feature_index, double split_value, DataSet& left,
-                    DataSet& right) const {
+                    DataSet& right, const DataSet& data_set) const {
   double feature_value = -1.0;
-  for (int i = 0; i < GetNumObservations(); i++) {
+  for (int i = 0; i < data_set.GetNumObservations(); i++) {
     if (feature_index == 0) {
       feature_value = x1_values_[i];
     } else {
