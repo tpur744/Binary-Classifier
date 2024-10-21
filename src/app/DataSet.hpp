@@ -22,6 +22,8 @@ class DataSet {
   void ClearData(void);
   bool IsPure() const;
   bool IsEmpty() const;
+  int GetMajorityLabel() const;
+  int GetLabel(int index) const;
 
  private:
   std::vector<double> x1_values_;

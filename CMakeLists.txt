@@ -19,7 +19,8 @@ add_subdirectory(src/app)
 add_subdirectory(test)
 
 enable_testing()
-
+set (CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -fno-omit-frame-pointer -fsanitize=address")
+set (CMAKE_LINKER_FLAGS_DEBUG "${CMAKE_LINKER_FLAGS_DEBUG} -fno-omit-frame-pointer -fsanitize=address")
 # Link the subdirectory targets to the main executable
 target_link_libraries(binary_classifier SrcTarget SrcAppSupportTarget)
 

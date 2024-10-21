@@ -18,15 +18,36 @@ using namespace std;
 */
 
 App::App() {
+  AddData(to_string(0.9074), to_string(0.5488), to_string(-1));
+  AddData(to_string(0.9529), to_string(0.6392), to_string(-1));
+  AddData(to_string(0.5635), to_string(0.7734), to_string(-1));
+  AddData(to_string(0.9567), to_string(0.9788), to_string(-1));
+  AddData(to_string(0.8162), to_string(0.9824), to_string(-1));
+  AddData(to_string(0.3279), to_string(0.3789), to_string(-1));
+  AddData(to_string(0.0179), to_string(0.3716), to_string(-1));
+  AddData(to_string(0.4246), to_string(0.1961), to_string(-1));
+  AddData(to_string(0.4670), to_string(0.3277), to_string(-1));
+  AddData(to_string(0.3394), to_string(0.0856), to_string(-1));
+  AddData(to_string(0.0788), to_string(0.5709), to_string(1));
+  AddData(to_string(0.4853), to_string(0.7109), to_string(1));
+  AddData(to_string(0.4786), to_string(0.9579), to_string(1));
+  AddData(to_string(0.2427), to_string(0.8961), to_string(1));
+  AddData(to_string(0.4001), to_string(0.9797), to_string(1));
+  AddData(to_string(0.8530), to_string(0.4117), to_string(1));
+  AddData(to_string(0.5159), to_string(0.3474), to_string(1));
+  AddData(to_string(0.6385), to_string(0.1585), to_string(1));
+  AddData(to_string(0.5231), to_string(0.4751), to_string(1));
+  AddData(to_string(0.5486), to_string(0.0172), to_string(1));
+
   classifier_ = nullptr;
   // TODO
 }
 
 App::~App() {
-  if (classifier_) {
-    delete classifier_;
-    classifier_ = nullptr;
-  }
+  // if (classifier_) {
+  //   delete classifier_;
+  //   classifier_ = nullptr;
+  // }
 }
 
 void App::AddData(std::string x_in_, std::string y_in_, std::string label_in_) {
@@ -53,6 +74,7 @@ void App::ClearData() {
 void App::ShowData() { data_set_.ShowData(); }
 
 void App::TrainClassifier() {
+  cout << "Training classifier..." << endl;
   int positive_count = 0;
   int negative_count = 0;
   positive_count = data_set_.GetPositiveCount();
@@ -68,15 +90,22 @@ void App::TrainClassifier() {
 
   // Delete the old classifier if it exists
   if (classifier_) {
+    cout << "Deleting old classifier..." << endl;
     delete classifier_;
     classifier_ = nullptr;
   }
-
+  if (data_set_.IsEmpty()) {
+    cout << "No data to train on." << endl;
+    return;
+  }
+  if (classifier_ == nullptr) {
+    // classifier_ = new BinaryTree();
+    cout << "Creating new classifier..." << endl;
+    // return;
+  }
   // Create a new classifier and grow the tree
   classifier_ = new BinaryTree();
   classifier_->Grow(data_set_);
-
-  std::cout << "Classifier trained successfully!" << std::endl;
 }
 
 void App::Classify(std::string x_in_, std::string y_in_) {

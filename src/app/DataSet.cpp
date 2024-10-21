@@ -58,6 +58,10 @@ double DataSet::GetEntropy() const {
   return impurity;
 }
 
+int DataSet::GetMajorityLabel() const {
+  return GetPositiveCount() > GetNegativeCount() ? 1 : -1;
+}
+
 int DataSet::GetNumFeatures() const { return 2; }
 
 double DataSet::GetFeatureValue(int feature_index,
@@ -71,20 +75,22 @@ double DataSet::GetFeatureValue(int feature_index,
 
 void DataSet::Split(int feature_index, double split_value, DataSet& left,
                     DataSet& right) const {
+  double feature_value = -1.0;
   for (int i = 0; i < GetNumObservations(); i++) {
-    double feature_value = GetFeatureValue(feature_index, i);
-
+    if (feature_index == 0) {
+      feature_value = x1_values_[i];
+    } else {
+      feature_value = x2_values_[i];
+    }
     if (feature_value >= split_value) {
       right.AddObservation(x1_values_[i], x2_values_[i], labels_[i]);
     } else if (feature_value < split_value) {
       left.AddObservation(x1_values_[i], x2_values_[i], labels_[i]);
     }
   }
-
-  if (left.IsEmpty() || right.IsEmpty()) {
-    std::cout << "empty dataset" << std::endl;
-  }
 }
+
+int DataSet::GetLabel(int index) const { return labels_[index]; }
 
 void DataSet::ShowData(void) {
   if (x1_values_.size() == 0) {
