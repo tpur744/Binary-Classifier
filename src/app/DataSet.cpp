@@ -66,7 +66,6 @@ double DataSet::GetEntropy() const {
   }
   // double impurity = (-p1 * log2(p1)) - (p2 * log2(p2));
   double impurity = -(n1 / n) * log2(n1 / n) - (n2 / n) * log2(n2 / n);
-  std::cout << impurity << std::endl;
   return impurity;
 }
 

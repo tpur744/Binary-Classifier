@@ -74,7 +74,6 @@ void App::ClearData() {
 void App::ShowData() { data_set_.ShowData(); }
 
 void App::TrainClassifier() {
-  cout << "entropy: " << data_set_.GetEntropy() << endl;
   int positive_count = 0;
   int negative_count = 0;
   positive_count = data_set_.GetPositiveCount();
