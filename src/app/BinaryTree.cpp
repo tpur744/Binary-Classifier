@@ -160,18 +160,16 @@ void BinaryTree::FindBestSplit(const DataSet& data_set,
       double split_value = data_set.GetFeatureValue(i, j);
       DataSet left, right;
       data_set.Split(i, split_value, left, right, data_set);
+
       double entropy_left = left.GetEntropy();
+
       double entropy_right = right.GetEntropy();
 
-      int n1 = left.GetNumObservations();
+      int n = left.GetNumObservations() / data_set.GetNumObservations();
 
       double impurity_drop =
-          data_set.GetEntropy() -
-          (left.GetNumObservations() / data_set.GetNumObservations()) *
-              entropy_left -
-          (1 - ((left.GetNumObservations() / data_set.GetNumObservations()))) *
-              entropy_right;
-
+          data_set.GetEntropy() - (n)*entropy_left - (1 - n) * entropy_right;
+      cout << impurity_drop << endl;
       if (impurity_drop > best_impurity_drop) {
         best_impurity_drop = impurity_drop;
         best_feature_index = i;
@@ -198,9 +196,7 @@ void BinaryTree::Grow(const DataSet& data_set) {
 
   // Find the best feature and value for splitting
   FindBestSplit(data_set, best_feature_index, best_split_value);
-
-  std::cout << "Best split found at feature " << best_feature_index
-            << " and value " << best_split_value << std::endl;
+  cout << "best_split_value: " << best_split_value << endl;
 
   if (best_feature_index == -1) {
     std::cout << "No best split found. Stopping recursion." << std::endl;
@@ -210,15 +206,7 @@ void BinaryTree::Grow(const DataSet& data_set) {
   // Split the dataset based on the best split
   DataSet left, right;
 
-  cout << "dataset has " << data_set.GetNumObservations() << " observations."
-       << endl;
-
   data_set.Split(best_feature_index, best_split_value, left, right, data_set);
-
-  std::cout << "Left dataset has " << left.GetNumObservations()
-            << " observations." << std::endl;
-  std::cout << "Right dataset has " << right.GetNumObservations()
-            << " observations." << std::endl;
 
   // If either side of the split is empty, stop recursion to avoid infinite
   // loops
@@ -238,7 +226,7 @@ void BinaryTree::Grow(const DataSet& data_set) {
         new BinaryTree();   // Create a new tree for the left subtree
     left_tree->Grow(left);  // Recursively grow the left subtree
     root_->SetLeft(left_tree->GetRoot());  // Attach the left subtree
-    delete left_tree;  // Clean up temporary tree after attaching
+    // delete left_tree;  // Clean up temporary tree after attaching
   }
 
   if (!right.IsEmpty()) {
@@ -246,7 +234,7 @@ void BinaryTree::Grow(const DataSet& data_set) {
         new BinaryTree();     // Create a new tree for the right subtree
     right_tree->Grow(right);  // Recursively grow the right subtree
     root_->SetRight(right_tree->GetRoot());  // Attach the right subtree
-    delete right_tree;  // Clean up temporary tree after attaching
+    // delete right_tree;  // Clean up temporary tree after attaching
   }
 }
 
@@ -290,4 +278,17 @@ void BinaryTree::ShowNode(BinaryTreeNode* node, int depth) const {
     ShowNode(node->GetLeft(), depth + 1);   // Show left child
     ShowNode(node->GetRight(), depth + 1);  // Show right child
   }
+}
+
+// Classify an observation
+int BinaryTree::Classify(int x1, int x2) const {
+  BinaryTreeNode* current = root_;
+  while (!current->IsLeaf()) {
+    if (x1 >= current->GetSplitValue()) {
+      current = current->GetRight();
+    } else {
+      current = current->GetLeft();
+    }
+  }
+  return current->GetLabel();
 }

@@ -44,17 +44,29 @@ const std::vector<int>& DataSet::GetLabels() const { return labels_; }
 
 double DataSet::GetEntropy() const {
   int n = GetNumObservations();
-  int n1 = GetPositiveCount();
-  int n2 = GetNegativeCount();
+  // int n1 = GetPositiveCount();
+  // int n2 = GetNegativeCount();
+  float n1 = 0.0f;
+  float n2 = 0.0f;
+  if (n == 0) {
+    return 0.0;
+  }
+  if (n == 1) {
+    return 0.0;
+  }
+  for (int i = 0; i < n; i++) {
+    if (labels_[i] == 1) {
+      n1++;
+    } else {
+      n2++;
+    }
+  }
   if (n1 == 0 || n2 == 0) {
     return 0.0;
   }
-  double p1 = (double)n1 / n;
-  double p2 = (double)n2 / n;
-
-  double impurity = -p1 * log2(p1) - p2 * log2(p2);
-
-  // double impurity = -(p1 * log2(p1) - p2 * log2(p2));
+  // double impurity = (-p1 * log2(p1)) - (p2 * log2(p2));
+  double impurity = -(n1 / n) * log2(n1 / n) - (n2 / n) * log2(n2 / n);
+  std::cout << impurity << std::endl;
   return impurity;
 }
 

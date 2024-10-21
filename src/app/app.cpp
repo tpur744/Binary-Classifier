@@ -45,7 +45,7 @@ App::App() {
 
 App::~App() {
   // if (classifier_) {
-  //   delete classifier_;
+  //   delete classifier_;c
   //   classifier_ = nullptr;
   // }
 }
@@ -74,7 +74,7 @@ void App::ClearData() {
 void App::ShowData() { data_set_.ShowData(); }
 
 void App::TrainClassifier() {
-  cout << "Training classifier..." << endl;
+  cout << "entropy: " << data_set_.GetEntropy() << endl;
   int positive_count = 0;
   int negative_count = 0;
   positive_count = data_set_.GetPositiveCount();
@@ -106,7 +106,22 @@ void App::TrainClassifier() {
 }
 
 void App::Classify(std::string x_in_, std::string y_in_) {
-  // TODO
+  if (!classifier_) {
+    std::cout << "Cannot perform that operation without first training a "
+                 "classifier."
+              << std::endl;
+    return;
+  }
+
+  double x1 = stod(x_in_);
+  double x2 = stod(y_in_);
+
+  int label = classifier_->Classify(x1, x2);
+  if (label == -1) {
+    cout << "Observation classified as: -1" << endl;
+  } else {
+    cout << "Observation classified as: 1" << endl;
+  }
 }
 
 void App::ShowClassifier() {
